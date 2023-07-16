@@ -26,6 +26,5 @@
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",
     "typescript": "typescriptreact"
-  },
-  
+  }
 }

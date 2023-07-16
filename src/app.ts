@@ -38,11 +38,15 @@ app.use(passport.initialize());
 app.use(passport.session()); */
 
 //# route base
-// home route
+//  🏠 home route
 app.get('^/$|/index(.html)?', (_req, res) => {
   res.sendFile(path.join(__dirname, './utils/shared/views', 'index.html'));
 });
-// business routes
+//  ✅ route check
+app.get('/health-check', (req, res) => {
+  res.send('OK');
+});
+// 👨 business routes
 app.use('/api/v1', routes);
 
 //# error handler
