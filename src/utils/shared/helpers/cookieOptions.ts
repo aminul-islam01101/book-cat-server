@@ -1,7 +1,7 @@
-import { configs } from '../../configs/env.configs';
-
 const cookieOptions = {
-  secure: configs.env === 'production',
+  secure: true,
+  sameSite: 'none' as const,
+  // secure: configs.env === 'production',
   httpOnly: true,
 };
 

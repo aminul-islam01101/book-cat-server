@@ -2,7 +2,7 @@ import { configs } from './env.configs';
 
 type StaticOrigin = boolean | string | RegExp | (boolean | string | RegExp)[];
 const whitelist: StaticOrigin = [
-  'https://www.yoursite.com',
+  configs.clientProduction as string,
   'http://127.0.0.1:5500',
   configs.clientUrl as string,
 ];

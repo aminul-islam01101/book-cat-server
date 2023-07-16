@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
-import { configs } from '../../../../utils/configs/env.configs';
 import catchAsync from '../../../../utils/shared/helpers/catchAsync';
+import { cookieOptions } from '../../../../utils/shared/helpers/cookieOptions';
 import sendResponse from '../../../../utils/shared/helpers/sendResponse';
 import { TEmailLogin, TLoginUserResponse, TRefreshToken, TUser } from '../shared/auth.types';
 
@@ -27,19 +27,11 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 //% login user controller
 
 const loginUser = catchAsync(async (req: Request, res: Response) => {
-  const { refreshToken: rt } = req.cookies as TRefreshToken;
-  console.log('🌼 🔥🔥 file: email.controllers.ts:31 🔥🔥 loginUser 🔥🔥 token🌼', rt);
-
   const { ...loginData } = req.body as TEmailLogin;
   const result = await EmailServices.loginEmailUser(loginData);
   const { refreshToken, ...rest } = result;
 
   // set refresh token into cookie
-
-  const cookieOptions = {
-    secure: configs.env === 'production',
-    httpOnly: true,
-  };
 
   res.cookie('refreshToken', refreshToken, cookieOptions);
   res.cookie('accessToken', rest.accessToken, cookieOptions);

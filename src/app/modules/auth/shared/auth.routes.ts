@@ -26,5 +26,6 @@ const moduleRoutes = [
 moduleRoutes.forEach((route) => AuthRoutes.use(route.path, route.route));
 AuthRoutes.get('/me', roleVerifier(OWNER, READER, ADMIN), AuthControllers.loggedInUser);
 AuthRoutes.post('/logout', AuthControllers.logOut);
+AuthRoutes.get('/refresh', AuthControllers.refreshAccessToken);
 
 export default AuthRoutes;

@@ -16,8 +16,8 @@ const sessionConfigs = {
   cookie: {
     // maxAge: 2419200000,
     //* production only
-    // secure: true
-    // sameSite: 'none',
+    secure: true,
+    sameSite: 'none',
   },
 };
 export default sessionConfigs;

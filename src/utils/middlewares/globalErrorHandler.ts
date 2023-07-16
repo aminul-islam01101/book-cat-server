@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { ErrorRequestHandler } from 'express';
+import { JsonWebTokenError } from 'jsonwebtoken';
 import { ZodError } from 'zod';
 
 import { configs } from '../configs/env.configs';
@@ -12,6 +13,7 @@ import handleValidationError from '../shared/errors/handleValidationError';
 import handleZodError from '../shared/errors/handleZodError';
 import { errorLogger } from '../shared/logger';
 import { TGenericErrorMessage } from '../shared/types/errorTypes';
+import handleJwtTokenError from '../shared/errors/handleJwtTokenError';
 
 const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
   if (configs.env === 'development') {
@@ -55,7 +57,12 @@ const globalErrorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
     errorMessages = simplifiedError.errorMessages;
   }
 
-  // if(error instanceof JsonWebTokenError){}
+  if (error instanceof JsonWebTokenError) {
+    const simplifiedError = handleJwtTokenError(error);
+    statusCode = simplifiedError.statusCode;
+    errorName = simplifiedError.errorName;
+    errorMessages = simplifiedError.errorMessages;
+  }
 
   // api error handler
   else if (error instanceof HandleApiError) {

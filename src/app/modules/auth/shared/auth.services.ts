@@ -1,22 +1,20 @@
 import httpStatus from 'http-status';
+import { Secret } from 'jsonwebtoken';
 
+import { configs } from '../../../../utils/configs/env.configs';
 import { HandleApiError } from '../../../../utils/shared/errors/handleApiError';
+import { jwtHelpers } from '../../../../utils/shared/helpers/jwtHelpers';
 
 import { User } from './auth.models';
-import { TLoginUserResponse } from './auth.types';
+import { TLoginUserResponse, TRefreshTokenResponse } from './auth.types';
 
 const loggedInUser = async (
   payload: TLoginUserResponse,
   token: string
 ): Promise<TLoginUserResponse> => {
   const { email } = payload;
-  console.log('🌼 🔥🔥 file: auth.services.ts:10 🔥🔥 loggedInUser 🔥🔥 email🌼', email);
 
   const isUserExist = await User.isUserExist(email);
-  console.log(
-    '🌼 🔥🔥 file: email.services.ts:24 🔥🔥 loginEmailUser 🔥🔥 isUserExist🌼',
-    isUserExist
-  );
 
   if (!isUserExist) {
     throw new HandleApiError(httpStatus.NOT_FOUND, 'User does not exist');
@@ -40,6 +38,45 @@ const loggedInUser = async (
   };
 };
 
+const refreshAccessToken = async (token: string): Promise<TLoginUserResponse> => {
+  let verifiedToken = null;
+  try {
+    verifiedToken = jwtHelpers.verifyToken(token, configs.jwtSecretRefresh as Secret);
+  } catch (err) {
+    throw new HandleApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token');
+  }
+
+  const { id } = verifiedToken;
+
+  const isUserExist = await User.findById(id);
+  if (!isUserExist) {
+    throw new HandleApiError(httpStatus.NOT_FOUND, 'User does not exist');
+  }
+  // generate new token
+
+  const { role, email, firstName, lastName, profileImage } = isUserExist;
+
+  const newAccessToken = jwtHelpers.createToken(
+    {
+      id: isUserExist._id,
+      role,
+      email,
+    },
+    configs.jwtSecretAccess as Secret,
+    configs.jwtSecretAccessExpired as string
+  );
+
+  return {
+    accessToken: newAccessToken,
+    firstName,
+    lastName,
+    profileImage,
+    role,
+    email,
+  };
+};
+
 export const AuthServices = {
   loggedInUser,
+  refreshAccessToken,
 };
