@@ -3,15 +3,20 @@ import { CallbackWithoutResultAndOptionalError, Schema, model } from 'mongoose';
 
 import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
 
-import { BookModel, TBook, TReview } from './book.types';
 import { publicationMonths } from './book.constants';
+import { BookModel, TBook, TReview } from './book.types';
 
-const TReviewSchema = new Schema<TReview>({
-  reviewer: { type: String, required: true },
-  description: { type: String, required: true },
-  profileImage: { type: String, required: true },
-  timeStamp: { type: Date, required: true },
-});
+const TReviewSchema = new Schema<TReview>(
+  {
+    reviewer: { type: String },
+    description: { type: String, required: true },
+    profileImage: { type: String },
+    email: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export const bookSchema = new Schema<TBook, BookModel>(
   {
@@ -29,9 +34,15 @@ export const bookSchema = new Schema<TBook, BookModel>(
     },
     reviews: [TReviewSchema],
     owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'Owner',
-      required: true,
+      email: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: 'Owner',
+        required: true,
+      },
     },
   },
   {

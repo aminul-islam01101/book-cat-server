@@ -8,7 +8,7 @@ import { paginationFields } from '../../../utils/shared/paginations/pagination.c
 
 import { bookFilterableFields } from './book.constants';
 import { BookServices } from './book.services';
-import { TBook, TGenreYear } from './book.types';
+import { TBook, TGenreYear, TReview } from './book.types';
 
 const createBook = catchAsync(async (req: Request, res: Response) => {
   const bookData = req.body as TBook;
@@ -59,4 +59,16 @@ const getYearGenre = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-export const BookControllers = { createBook, getAllBooks, getSingleBook, getYearGenre };
+const addReview = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const data = req.body as TReview;
+  const result = await BookServices.addReview(id, data);
+
+  sendResponse<TBook>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `${!result ? 'Review add failed' : 'Review added successfully !'}`,
+    data: result,
+  });
+});
+export const BookControllers = { createBook, getAllBooks, getSingleBook, getYearGenre, addReview };

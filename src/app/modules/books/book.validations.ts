@@ -25,6 +25,16 @@ const createBookZodSchema = z.object({
     }),
   }),
 });
+const addReviewZodSchema = z.object({
+  body: z.object({
+    reviewer: z.string().optional(),
+    description: z.string().min(4, { message: 'Description must be at least 4 characters long' }),
+    profileImage: z.string().optional(),
+    email: z.string({ required_error: 'Email is required' }),
+  }),
+});
+
 export const BookValidations = {
   createBookZodSchema,
+  addReviewZodSchema,
 };

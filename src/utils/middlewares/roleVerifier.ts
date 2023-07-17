@@ -13,6 +13,7 @@ const roleVerifier =
     try {
       // get authorization token
       const token = req.headers.authorization;
+
       const { refreshToken, accessToken } = req.cookies as TTokens;
 
       if (!token && !accessToken) {

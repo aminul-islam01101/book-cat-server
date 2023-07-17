@@ -13,7 +13,7 @@ import { Owner } from '../owners/owner.models';
 
 import { bookSearchableFields } from './book.constants';
 import { Book } from './book.models';
-import { TBook, TBookFilters, TGenreYear } from './book.types';
+import { TBook, TBookFilters, TGenreYear, TReview } from './book.types';
 
 //% create email user service
 const createBook = async (book: TBook): Promise<TBook | null> => {
@@ -25,9 +25,10 @@ const createBook = async (book: TBook): Promise<TBook | null> => {
   const session = await startSession();
   try {
     session.startTransaction();
+    const ownerDetails = { id: owner._id, email: owner.email };
 
     // Create User
-    const createdBook = await Book.create([{ ...book, owner: owner._id }], { session });
+    const createdBook = await Book.create([{ ...book, owner: ownerDetails }], { session });
     if (!createdBook.length) {
       throw new HandleApiError(httpStatus.BAD_REQUEST, 'Failed to create Book');
     }
@@ -106,4 +107,24 @@ const getYearGenre = async (): Promise<TGenreYear | null | undefined> => {
     console.error(err);
   }
 };
-export const BookServices = { createBook, getAllBooks, getSingleBook, getYearGenre };
+const addReview = async (id: string, review: TReview): Promise<TBook | null> => {
+  const isBookExist = await Book.findById(id);
+  if (!isBookExist) {
+    throw new HandleApiError(httpStatus.BAD_REQUEST, 'Book not found');
+  }
+
+  const isReviewExist = isBookExist.reviews.find(
+    (eachReview) =>
+      eachReview.email === review.email && eachReview.description === review.description
+  );
+  if (isReviewExist) {
+    throw new HandleApiError(httpStatus.BAD_REQUEST, 'Review already exist');
+  }
+  const updateBookReview = await Book.findByIdAndUpdate(
+    id,
+    { $push: { reviews: review } },
+    { new: true }
+  );
+  return updateBookReview;
+};
+export const BookServices = { createBook, getAllBooks, getSingleBook, getYearGenre, addReview };

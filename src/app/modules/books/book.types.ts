@@ -14,32 +14,23 @@ export type TMonths =
   | 'November'
   | 'December';
 export type TReview = {
-  reviewer: string;
+  reviewer?: string;
   description: string;
-  profileImage: string;
-  timeStamp: Date;
+  profileImage?: string;
+  email: string;
 };
 
 export type TBook = {
   title: string;
   author: string;
   genre: string;
-  publicationMonth:
-    | 'January'
-    | 'February'
-    | 'March'
-    | 'April'
-    | 'May'
-    | 'June'
-    | 'July'
-    | 'August'
-    | 'September'
-    | 'October'
-    | 'November'
-    | 'December';
+  publicationMonth: TMonths;
   publicationYear: string;
   reviews: TReview[];
-  owner: Types.ObjectId;
+  owner: {
+    id: Types.ObjectId;
+    email: string;
+  };
   email: string;
 };
 export type TBookFilters = {
