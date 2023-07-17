@@ -12,7 +12,7 @@ import { EmailServices } from './email.services';
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const userData = req.body as TUser;
   userData.signUpMethod = 'not-verified';
-  userData.role = 'owner';
+  userData.role = 'reader';
   const result = await EmailServices.createEmailUser(userData);
   const { password, ...rest } = result as TUser;
 

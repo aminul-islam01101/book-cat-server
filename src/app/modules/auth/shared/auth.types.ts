@@ -56,6 +56,8 @@ export type TUser = TEmailLogin & {
   confirmationToken?: string;
   signUpMethod: string;
   profileImage?: string;
+  owner: Schema.Types.ObjectId;
+  reader: Schema.Types.ObjectId;
 };
 
 export type TUserMethods = { generateConfirmationToken(): string };

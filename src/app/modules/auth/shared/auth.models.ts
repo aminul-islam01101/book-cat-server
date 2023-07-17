@@ -40,6 +40,16 @@ export const userSchema = new Schema<TUser, Record<string, unknown>, TUserMethod
       required: true,
     },
     confirmationToken: { type: String },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'Owner',
+      required: true,
+    },
+    reader: {
+      type: Schema.Types.ObjectId,
+      ref: 'Reader',
+      required: true,
+    },
   },
 
   {
