@@ -1,0 +1,51 @@
+[
+  {
+    "tags": ["react", "javascript", "node"],
+    "address": { "name": "Mr. x", "district": "dhaka" },
+    "title" :["React","developers"],
+    "description": "React is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies.",
+    "events": [
+      {
+        "date": "Jun 20, 2023",
+        "time": "09:00AM-10:00AM",
+        "slotStatus": "available"
+      }
+    ]
+  },
+  {
+    "tags": ["python", "programming", "development"],
+    "address": { "name": "Ms. Y", "district": "New York" },
+    "title" :["Node","developers"],
+    "description": "node is a free and open-source front-end JavaScript library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies.",
+    "events": [
+      {
+        "date": "Aug 15, 2023",
+        "time": "02:30PM-04:00PM",
+        "slotStatus": "available"
+      },
+      {
+        "date": "Aug 17, 2023",
+        "time": "11:00AM-12:30PM",
+        "slotStatus": "booked"
+      }
+    ]
+  },
+  {
+    "tags": ["java", "android", "mobile"],
+    "address": { "name": "Mr. Z", "district": "San Francisco" },
+    "description": "laravel is a free and open-source front-end php library for building user interfaces based on UI components. It is maintained by Meta and a community of individual developers and companies.",
+    "tags" :["php", "developers"],
+    "events": [
+      {
+        "date": "Sep 5, 2023",
+        "time": "03:00PM-04:30PM",
+        "slotStatus": "available"
+      },
+      {
+        "date": "Sep 7, 2023",
+        "time": "10:00AM-11:30AM",
+        "slotStatus": "available"
+      }
+    ]
+  }
+]

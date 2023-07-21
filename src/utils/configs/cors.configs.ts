@@ -24,7 +24,7 @@ const corsOptions: {
       callback(new Error('Origin provided in backend mismatched. Not allowed by CORS'));
     }
   },
-  methods: 'GET,POST,PUT,DELETE', // Add allowed methods
+  methods: 'GET,POST,PUT,DELETE,PATCH', // Add allowed methods
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   optionsSuccessStatus: 200,
 };

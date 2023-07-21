@@ -9,22 +9,34 @@ import { BookValidations } from './book.validations';
 
 const router = express.Router();
 const { createBookZodSchema, addReviewZodSchema } = BookValidations;
-const { createBook, getAllBooks, getSingleBook, getYearGenre, addReview } = BookControllers;
-const { OWNER, READER, ADMIN } = EnumUserRole;
+const {
+  createBook,
+  getAllBooks,
+  getSingleBook,
+  getYearGenre,
+  addReview,
+  updateBook,
+  deleteBook,
+  manipulateFavorite,
+  getReader,
+} = BookControllers;
+const { READER } = EnumUserRole;
 
-// router.post('/', zodValidator(createBookZodSchema), roleVerifier(READER), createBook);
-// router.get('/year-genre', getYearGenre);
-// router.route('/:id').get(roleVerifier(READER), getSingleBook);
+router
+  .route('/')
+  .post(zodValidator(createBookZodSchema), roleVerifier(READER), createBook)
+  .get(getAllBooks);
 
-// //   .delete(roleVerifier(SELLER), deleteBook);
-// router.put('/review/:id', zodValidator(addReviewZodSchema), addReview);
-// router.get('/', getAllBooks);
-router.get('/year-genre', getYearGenre);
-router.get('/', getAllBooks);
-router.get('/:id', roleVerifier(READER), getSingleBook);
+router.route('/year-genre').get(getYearGenre);
 
-router.post('/', zodValidator(createBookZodSchema), roleVerifier(READER), createBook);
+router
+  .route('/:id')
+  .get(roleVerifier(READER), getSingleBook)
+  .patch(roleVerifier(READER), updateBook)
+  .delete(roleVerifier(READER), deleteBook);
 
 router.put('/review/:id', zodValidator(addReviewZodSchema), addReview);
+router.post('/favorite/:email', manipulateFavorite);
+router.get('/reader/:email', getReader);
 
 export const BookRoutes = router;

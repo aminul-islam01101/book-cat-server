@@ -13,6 +13,7 @@ import { requestLogger } from './utils/middlewares/requestLogger';
 import { ln, logger } from './utils/shared/logger';
 //* passport configs
 // import './utils/configs/passport.configs';
+import pick from './utils/shared/helpers/pick';
 
 const app: Application = express();
 app.use(cookieParser());
@@ -42,8 +43,16 @@ app.use(passport.session()); */
 app.get('^/$|/index(.html)?', (_req, res) => {
   res.sendFile(path.join(__dirname, './utils/shared/views', 'index.html'));
 });
+
 //  ✅ route check
 app.get('/health-check', (req, res) => {
+  const data = ['flight', 'destination'];
+  const result: { [key: string]: any } = {};
+
+  data.forEach((key) => {
+    result[key] = req.query[key];
+  });
+  console.log('🌼 🔥🔥 file: app.ts:47 🔥🔥 app.get 🔥🔥 req🌼', pick(result, data));
   res.send('OK');
 });
 // 👨 business routes

@@ -1,17 +1,51 @@
 export const searchFilterCalculator = (
   searchTerm: string | undefined,
   SearchableFields: string[],
-  filtersData: { [key: string]: string | number | boolean }
+  filtersData: { [key: string]: string | number | boolean },
+  checkboxFilters: { [key: string]: string | number | (string | number)[] },
+  tags: string[] | undefined,
+  bookTagSearchableFields: string[]
 ): { $and: object[] } | object => {
   const andConditions = [];
+  const orConditions = [];
+
   if (searchTerm) {
-    andConditions.push({
-      $or: SearchableFields.map((field) => ({
+    orConditions.push(
+      ...SearchableFields.map((field) => ({
         [field]: {
           $regex: searchTerm,
           $options: 'i',
         },
-      })),
+      }))
+    );
+  }
+  if (Object.keys(checkboxFilters).length) {
+    orConditions.push(
+      ...Object.entries(checkboxFilters).map(([field, value]) => ({
+        //    [field]: {$in: value},  both will give same result
+        [field]: value,
+      }))
+    );
+  }
+
+  const tagsArray = Array.isArray(tags) ? tags : [tags];
+
+  // if (tagsArray.length && bookTagSearchableFields.length) {
+  //   const tagConditions = tagsArray.map((tag) =>
+  //     bookTagSearchableFields.map((field) => {
+  //       // Use $in for publicationYear, $regex for other fields
+  //       return field === 'publicationYear'
+  //         ? { [field]: { $in: [tag] } }
+  //         : { [field]: { $regex: tag, $options: 'i' } };
+  //     })
+  //   );
+  //   const flattenedTagConditions = tagConditions.flat();
+  //   orConditions.push(...flattenedTagConditions);
+  // }
+
+  if (orConditions.length) {
+    andConditions.push({
+      $or: orConditions,
     });
   }
 
@@ -69,3 +103,5 @@ export const searchFilterCalculator = (
 
   return whereConditions;
 };
+
+//

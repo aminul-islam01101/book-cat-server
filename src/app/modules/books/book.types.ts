@@ -31,16 +31,28 @@ export type TBook = {
     id: Types.ObjectId;
     email: string;
   };
+  publicationTime?: string;
+
   email: string;
 };
 export type TBookFilters = {
   searchTerm?: string;
   genre?: string;
   publicationYear?: string;
+  tags?: string[];
 };
+export type TBookCheckBookFilter = {
+  publicationMonth?: string;
+};
+
 export type TGenreYear = {
   genres: string[];
   years: { label: string; value: string }[];
 };
+export type TFavorites = {
+  bookId: string;
+  type: string;
+};
+
 export type ReviewModel = Model<TReview, Record<string, unknown>>;
 export type BookModel = Model<TBook, Record<string, unknown>>;

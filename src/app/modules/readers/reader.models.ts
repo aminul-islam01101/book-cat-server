@@ -8,7 +8,9 @@ export const ownerSchema = new Schema<TReader>(
       type: String,
       required: true,
     },
-    booksRead: [{ type: Types.ObjectId, ref: 'Book' }],
+    booksRead: [String],
+    bookmark: [String],
+    booksReading: [String],
   },
 
   {

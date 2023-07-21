@@ -5,13 +5,14 @@ import { cookieOptions } from '../../../../utils/shared/helpers/cookieOptions';
 import sendResponse from '../../../../utils/shared/helpers/sendResponse';
 
 import { AuthServices } from './auth.services';
-import { TLoginUserResponse, TRefreshToken, TRefreshTokenResponse } from './auth.types';
+import { TLoginUserResponse, TRefreshToken, TTokens } from './auth.types';
 
 //% login user controller
 
 const loggedInUser = catchAsync(async (req: Request, res: Response) => {
-  const token = req.headers.authorization;
-  const result = await AuthServices.loggedInUser(req.user as TLoginUserResponse, token as string);
+  const { refreshToken, accessToken } = req.cookies as TTokens;
+  const token = req.headers.authorization || accessToken;
+  const result = await AuthServices.loggedInUser(req.user as TLoginUserResponse, token);
 
   // set refresh token into cookie
 

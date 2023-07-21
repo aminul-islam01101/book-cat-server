@@ -6,7 +6,10 @@ const pick = <T extends Record<string, unknown>, K extends keyof T>(
 
   keys.forEach((key) => {
     if (obj && Object.hasOwnProperty.call(obj, key)) {
-      finalObj[key] = obj[key];
+      // finalObj[key] = obj[key];
+      if (obj[key]) {
+        finalObj[key] = obj[key];
+      }
     }
   });
   return finalObj;
