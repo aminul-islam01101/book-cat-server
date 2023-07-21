@@ -31,7 +31,7 @@ router.route('/year-genre').get(getYearGenre);
 
 router
   .route('/:id')
-  .get(roleVerifier(READER), getSingleBook)
+  .get(getSingleBook)
   .patch(roleVerifier(READER), updateBook)
   .delete(roleVerifier(READER), deleteBook);
 
